@@ -40,7 +40,6 @@ To run YTMasterJi locally, follow these steps:
 1. **Clone the Repository:**  
    ```sh
    git clone https://github.com/your-username/YTMasterJi.git
-   cd YTMasterJi
 2. **Navigate to the folder:**
     ```sh
     cd YTMasterJi
