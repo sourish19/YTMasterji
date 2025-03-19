@@ -1,5 +1,8 @@
 const bttn = document.querySelector(".btn");
 const videoContainer = document.querySelector("#videoContainer");
+const search = document.querySelector(".search-bar");
+console.log(search);
+
 
 const apiCall = async () => {
   try {
@@ -14,7 +17,7 @@ const apiCall = async () => {
 };
 
 const createElements = (myData) => {
-  myData.data.data.forEach((element) => {
+  const myMap = myData.data.data.map((element) => {
     const video = document.createElement("div");
     const thumbnail = document.createElement("img");
     const videoInfo = document.createElement("div");
@@ -60,14 +63,18 @@ const createElements = (myData) => {
 
     videoContainer.appendChild(video);
 
-    console.log(element.items.statistics.commentCount);
+    return { videoTitle: element.items.snippet.localized.title };
   });
+  return myMap;
 };
 
 bttn.addEventListener("click", async () => {
   const myData = await apiCall();
 
-  createElements(myData);
-});
+  let titles = createElements(myData);
+  console.log(titles);
 
-console.log(videoContainer);
+  search.addEventListener("input", (i) => {
+    console.log(i.target.value);
+  });
+});
