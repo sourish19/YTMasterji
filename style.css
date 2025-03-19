@@ -74,6 +74,16 @@ body {
 .video:hover {
     transform: scale(1.05);
 }
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.hide{
+    display: none;
+}
+
 .thumbnail {
     width: 100%;
     display: block;
