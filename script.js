@@ -1,60 +1,28 @@
 const bttn = document.querySelector(".btn");
 const videoContainer = document.querySelector("#videoContainer");
 const search = document.querySelector(".search-bar");
+// const next = document.querySelector(".nextBttn");
+// const pgNumber = document.querySelector(".pgNumber");
 
 const createElements = (element) => {
-  const id = element.items.id;
+  const div = document.createElement("div");
+  div.classList.add("video");
+  div.innerHTML = `
+        <a href="https://www.youtube.com/watch?v=${element.items.id}" target="_blank" class="linkTag">
+          <img src="${element.items.snippet.thumbnails.medium.url}" class="thumbnail" alt="Thumbnail" />
+          <div class="video-info">
+            <div class="title">${element.items.snippet.localized.title}</div>
+            <div class="channel">${element.items.snippet.channelTitle}</div>
+            <div class="meta-info">
+              <span class="views">${element.items.statistics.viewCount} views</span>
+              <span class="likes">${element.items.statistics.likeCount} likes</span>
+              <span class="comments">${element.items.statistics.commentCount} comments</span>
+            </div>
+          </div>
+        </a>`;
 
-  const video = document.createElement("div");
-  const thumbnail = document.createElement("img");
-  const videoInfo = document.createElement("div");
-  const videoTitle = document.createElement("div");
-  const channelName = document.createElement("div");
-  const linkTag = document.createElement("a");
-
-  const metaInfo = document.createElement("div");
-  const viewSpan = document.createElement("span");
-  const likeSpan = document.createElement("span");
-  const commentSpan = document.createElement("span");
-  const dateSpan = document.createElement("span");
-
-  video.classList.add("video");
-  thumbnail.classList.add("thumbnail");
-  videoInfo.classList.add("video-info");
-  videoTitle.classList.add("title");
-  channelName.classList.add("channel");
-  linkTag.classList.add("linkTag");
-
-  metaInfo.classList.add("meta-info");
-  viewSpan.classList.add("views");
-  likeSpan.classList.add("likes");
-  commentSpan.classList.add("comments");
-  dateSpan.classList.add("date");
-
-  channelName.innerText = element.items.snippet.channelTitle;
-  videoTitle.innerText = element.items.snippet.localized.title;
-  thumbnail.setAttribute("alt", "thumbnail");
-  thumbnail.setAttribute("src", element.items.snippet.thumbnails.medium.url);
-  linkTag.setAttribute("href", `https://www.youtube.com/watch?v=${id}`);
-  linkTag.setAttribute("target", "_blank");
-
-  viewSpan.innerText = `${element.items.statistics.viewCount} views`;
-  likeSpan.innerText = `${element.items.statistics.likeCount} likes`;
-  commentSpan.innerText = `${element.items.statistics.commentCount} comments`;
-
-  metaInfo.appendChild(viewSpan);
-  metaInfo.appendChild(likeSpan);
-  metaInfo.appendChild(commentSpan);
-
-  videoInfo.appendChild(videoTitle);
-  videoInfo.appendChild(channelName);
-  videoInfo.appendChild(metaInfo);
-  linkTag.appendChild(thumbnail);
-  linkTag.appendChild(videoInfo);
-
-  video.appendChild(linkTag);
-
-  videoContainer.appendChild(video);
+  videoContainer.appendChild(div);
+  const videoTitle = document.querySelector(".title");
 
   return {
     videoTitleElement: videoTitle.parentElement,
@@ -64,12 +32,12 @@ const createElements = (element) => {
 const apiCall = async () => {
   try {
     const data = await fetch(
-      "https://api.freeapi.app/api/v1/public/youtube/videos?page=1&limit=50&query=javascript&sortBy=keep%2520one%253A%2520mostLiked%2520%257C%2520mostViewed%2520%257C%2520latest%2520%257C%2520oldest"
+      `https://api.freeapi.app/api/v1/public/youtube/videos?page=1&limit=200`
     );
     const fetchedData = await data.json();
     return fetchedData;
   } catch (error) {
-    alert("Cannot fetched data");
+    throw new Error("Cannot fetched data");
   }
 };
 
@@ -84,8 +52,8 @@ const searchElement = (key, titles) => {
   });
 };
 
-bttn.addEventListener("click", async () => {
-  const myData = await apiCall();
+document.addEventListener("DOMContentLoaded", async () => {
+  let myData = await apiCall();
 
   let titles = myData.data.data.map((element) => {
     const returnedObject = createElements(element);

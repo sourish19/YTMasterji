@@ -130,12 +130,15 @@ a {
   font-size: 14px;
 }
 
-.btn-container {
+.bttn-container {
   text-align: center;
   margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
 }
 
-.btn {
+.bttn {
   padding: 12px 20px;
   font-size: 16px;
   background-color: #00e5ff;
@@ -146,12 +149,20 @@ a {
   transition: background 0.3s;
 }
 
-.btn:hover {
+.bttn:hover {
   background-color: #00bed3;
 }
 
-.btn:active {
+.bttn:active {
   transform: scale(0.95);
+}
+
+.pgNumber {
+  border: 1px solid black;
+  align-self: center;
+  font-size: larger;
+  padding: 15px;
+  border-radius: 3px;
 }
 
 .meta-info {
