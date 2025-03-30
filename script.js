@@ -5,6 +5,18 @@ const search = document.querySelector(".search-bar");
 // const pgNumber = document.querySelector(".pgNumber");
 
 const createElements = (element) => {
+  let { viewCount, likeCount, commentCount } = element.items.statistics;
+
+  viewCount = new Intl.NumberFormat("en", {
+    notation: "compact",
+    compactDisplay: "short",
+  }).format(viewCount);
+
+  likeCount = new Intl.NumberFormat("en", {
+    notation: "compact",
+    compactDisplay: "short",
+  }).format(likeCount);
+
   const div = document.createElement("div");
   div.classList.add("video");
   div.innerHTML = `
@@ -14,19 +26,14 @@ const createElements = (element) => {
             <div class="title">${element.items.snippet.localized.title}</div>
             <div class="channel">${element.items.snippet.channelTitle}</div>
             <div class="meta-info">
-              <span class="views">${element.items.statistics.viewCount} views</span>
-              <span class="likes">${element.items.statistics.likeCount} likes</span>
-              <span class="comments">${element.items.statistics.commentCount} comments</span>
+              <span class="views">${viewCount} views</span>
+              <span class="likes">${likeCount} likes</span>
+              <span class="comments">${commentCount} comments</span>
             </div>
           </div>
         </a>`;
 
   videoContainer.appendChild(div);
-  const videoTitle = document.querySelector(".title");
-
-  return {
-    videoTitleElement: videoTitle.parentElement,
-  };
 };
 
 const apiCall = async () => {
@@ -43,24 +50,29 @@ const apiCall = async () => {
 
 const searchElement = (key, titles) => {
   titles.map((element) => {
-    const searchText =
-      element.videoTitleElement.firstChild.innerText.toLowerCase();
-    const isVisible = searchText.includes(key.target.value.toLowerCase());
-    element.videoTitleElement
+    const searchText = element.firstElementChild.innerText.toLowerCase();
+
+    const isVisible = searchText.includes(key.toLowerCase());
+    element.firstElementChild
       .closest(".video")
       .classList.toggle("hide", !isVisible);
   });
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  let myData = await apiCall();
+  const myData = await apiCall();
 
-  let titles = myData.data.data.map((element) => {
-    const returnedObject = createElements(element);
-    return returnedObject;
+  const titles = myData.data.data.map((element) => {
+    createElements(element);
+  });
+
+  videoTitle = document.querySelectorAll(".title");
+
+  const arrayTitles = Array.from(videoTitle).map((element) => {
+    return element.parentElement;
   });
 
   search.addEventListener("input", (key) => {
-    searchElement(key, titles);
+    searchElement(key.target.value, arrayTitles);
   });
 });
