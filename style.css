@@ -98,6 +98,16 @@ a {
   display: none;
 }
 
+.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.active div {
+  color: #777;
+}
+
 .thumbnail {
   width: 100%;
   display: block;
